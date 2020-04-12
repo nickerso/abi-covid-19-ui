@@ -1,25 +1,17 @@
 <template>
   <div>
-    <top-header/>
-    <main id="main" role="main">
-      <nuxt/>
-    </main>
-    <bottom-footer/>
+    <npm-header/>
+    <nuxt/>
+    <npm-footer/>
   </div>
 </template>
-
 <script>
-import TopHeader from '~/components/TopHeader.vue'
-import BottomFooter from '~/components/BottomFooter.vue'
-
+import npmHeader from '~/components/Header'
+import npmFooter from '~/components/Footer'
 export default {
-  components: {
-    TopHeader,
-    BottomFooter
-  }
+  components: { npmHeader, npmFooter }
 }
 </script>
 
-<style lang="scss">
-@import '../assets/scss/styles.scss';
+<style>
 </style>
