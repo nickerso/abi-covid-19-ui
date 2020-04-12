@@ -1,0 +1,21 @@
+{
+  "name": "abi-covid-19",
+  "version": "1.0.0",
+  "description": "ABI COVID-19 Modelling",
+  "author": "David Nickerson",
+  "private": true,
+  "scripts": {
+    "dev": "nuxt",
+    "build": "nuxt build",
+    "start": "nuxt start",
+    "generate": "nuxt generate"
+  },
+  "dependencies": {
+    "nuxt": "^2.0.0"
+  },
+  "devDependencies": {
+    "css-loader": "^3.5.2",
+    "node-sass": "^4.13.1",
+    "sass-loader": "^8.0.2"
+  }
+}
