@@ -10,12 +10,10 @@
           </svg>
         </span>
       </div>
-      <!--
       <div class="Search__settings" v-if="showSettings">
-        <datepicker input-class="Search__input" placeholder="Start Date" v-model="periodStart" name="start-date" v-on:selected="validateDataRequest()"></datepicker>
-        <datepicker input-class="Search__input" placeholder="End Date" v-model="periodEnd" name="end-date" v-on:selected="validateDataRequest()"></datepicker>
+        <client-only><date-picker input-class="Search__input" placeholder="Start Date" v-model="periodStart" name="start-date" v-on:selected="validateDataRequest()"></date-picker></client-only>
+        <client-only><date-picker input-class="Search__input" placeholder="End Date" v-model="periodEnd" name="end-date" v-on:selected="validateDataRequest()"></date-picker></client-only>
       </div>
-      -->
 
       <div class="error-message" v-if="showError">
         {{ errorMessage }}
@@ -86,7 +84,6 @@
 
 <script>
 import axios from 'axios'
-//import Datepicker from 'vuejs-datepicker'
 
 import LineChart from '@/components/LineChart'
 import PackageInfo from '@/components/PackageInfo'
@@ -104,8 +101,7 @@ import { removeDuplicate, groupData } from '../utils/downloadFormatter.js'
 export default {
   components: {
     LineChart,
-    PackageInfo /*,
-    Datepicker   */
+    PackageInfo
   },
   data () {
     return {
