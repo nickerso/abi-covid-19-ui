@@ -1,6 +1,10 @@
 
 export default {
   mode: 'universal',
+  server: {
+    port: 3333,
+    host: '0.0.0.0'
+  },
   /*
   ** Headers of the page
   */
@@ -33,7 +37,6 @@ export default {
   ** Plugins to load before mounting the App
   */
   plugins: [
-    '~/plugins/components',
     {
       src: '~/plugins/datepicker',
       ssr: false
@@ -48,13 +51,6 @@ export default {
   ** Nuxt.js modules
   */
   modules: [
-    [
-      'storyblok-nuxt',
-      {
-        accessToken: '53YOK8ve0Dbj9r8MZUtBNAtt',
-        cacheProvider: 'memory'
-      }
-    ]
   ],
   /*
   ** Build configuration
