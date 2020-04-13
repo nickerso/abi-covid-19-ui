@@ -1,15 +1,15 @@
 <template>
-  <div class="Package">
-    <h1 class="Package__title">{{ packageName }}</h1>
-    <div class="Package__info">
-      <div class="Package__info-item">
-        <span>{{ totalDownloads }}</span><span class="info-label">Total Downloads</span>
+  <div class="Simulation">
+    <h1 class="Simulation__title">{{ simulationName }}</h1>
+    <div class="Simulation__info">
+      <div class="Simulation__info-item">
+        <span>{{ heartRate }}</span><span class="info-label">Heart Rate</span>
       </div>
-      <div class="Package__info-item">
-        <span>{{ period }}</span><span class="info-label">Period</span>
+      <div class="Simulation__info-item">
+        <span>{{ stimulationMode }}</span><span class="info-label">Stimulation mode</span>
       </div>
-      <div class="Package__info-item">
-        <span><a :href="packageLink">{{ packageName }} on npm</a></span><span class="info-label">Link</span>
+      <div class="Simulation__info-item">
+        <span>{{ stimulationLevel }}</span><span class="info-label">Stimulation level</span>
       </div>
     </div>
   </div>
@@ -18,19 +18,17 @@
 <script>
   export default {
     props: {
-      packageName: {
+      simulationName: {
         type: String
       },
-      totalDownloads: {
+      heartRate: {
         type: Number
       },
-      period: {
-        type: String
-      }
-    },
-    computed: {
-      packageLink () {
-        return `https://www.npmjs.com/package/${this.packageName}`
+      stimulationMode: {
+        type: Number
+      },
+      stimulationLevel: {
+        type: Number
       }
     }
   }
@@ -38,7 +36,7 @@
 
 <style lang="scss">
   @import "../assets/styles/_variables.scss";
-  .Package {
+  .Simulation {
     padding: rem(20);
     background-color: color(fjord);
     border-radius: $base-border-radius;

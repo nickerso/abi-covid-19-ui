@@ -25,18 +25,19 @@
         </div>
       </div>
 
-      <package-info :package-name="packageName" :total-downloads="totalDownloads" :period="formattedPeriod" v-if="loaded"></package-info>
+      <simulation-info :simulation-name="simulationName" v-bind:heart-rate="heartRate" v-bind:stimulation-mode="p1" v-bind:stimulation-level="p2" v-if="loaded"></simulation-info>
+
       <div class="Chart__container" v-if="loaded">
         <div class="Chart__title">
-          Downloads per Day
-          <span>{{ formattedPeriod }}</span>
+          Membrane Potential (mV)
           <hr>
         </div>
         <div class="Chart__content">
-          <line-chart v-if="loaded" :chart-data="downloads" :chart-labels="labels"></line-chart>
+          <line-chart v-if="loaded" :chart-data="membranePotential" :chart-labels="timeValues"></line-chart>
         </div>
       </div>
 
+      <!--
       <div class="Chart__container" v-if="loaded">
         <div class="Chart__title">
           Downloads per Week
@@ -69,6 +70,7 @@
           <line-chart v-if="loaded" :chart-data="downloadsYear" :chart-labels="labelsYear"></line-chart>
         </div>
       </div>
+      -->
     </div>
   </div>
 </template>
@@ -77,7 +79,7 @@
 import axios from 'axios'
 
 import LineChart from '@/components/LineChart'
-import PackageInfo from '@/components/PackageInfo'
+import SimulationInfo from '@/components/SimulationInfo'
 
 import {
   dateToYear,
@@ -92,12 +94,16 @@ import { removeDuplicate, groupData } from '../utils/downloadFormatter.js'
 export default {
   components: {
     LineChart,
-    PackageInfo
+    SimulationInfo
   },
   data () {
     return {
+      simulationName: 'Atrial EP Simulation',
       p1: null,
       p2: null,
+      membranePotential: null,
+      heartRate: null,
+      timeValues: null,
       package: null,
       packageName: '',
       loaded: false,
@@ -157,6 +163,14 @@ export default {
       axios.get(`/.api/run_model?stim_mode=${this.p1}&stim_level=${this.p2}`)
         .then(response => {
           console.log(response)
+          if (response.data.return_code == 0) {
+            this.membranePotential = response.data.output_data.membrane['v']
+            this.timeValues = [...Array(this.membranePotential.length).keys()]
+            this.heartRate = response.data.output_data.heart_rate
+          } else {
+            this.errorMessage = "Something went wrong running the simulation"
+            this.showError = true
+          }
           /*this.rawData = response.data.downloads
           this.downloads = response.data.downloads.map(entry => entry.downloads)
           this.labels = response.data.downloads.map(entry => entry.day)
