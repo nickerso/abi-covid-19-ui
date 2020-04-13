@@ -1,7 +1,7 @@
 <template>
   <footer>
-   <span> Build with <a href="https://vuejs.org/">Vue.js</a> and <a href="http://vue-chartjs.org/#/">vue-chartjs</a></span>
-   <span>For issues or feature requests visit <a href="https://github.com/apertureless/npm-stats">Github</a></span>
+   <span>Built with <a href="https://nuxtjs.org/">Nuxt.js</a>, <a href="https://vuejs.org/">Vue.js</a>, and <a href="http://vue-chartjs.org/#/">vue-chartjs</a></span>
+   <span>Powered by <a href="https://celml.org/">CellML</a> and <a href="https://opencor.ws/">OpenCOR</a></span>
   </footer>
 </template>
 
