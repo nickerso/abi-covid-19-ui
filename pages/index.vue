@@ -154,7 +154,7 @@ export default {
       }
       this.resetState()
       this.loading = true
-      axios.get(`http://localhost:12345/run_model?stim_mode=${this.p1}&stim_level=${this.p2}`)
+      axios.get(`/.api/run_model?stim_mode=${this.p1}&stim_level=${this.p2}`)
         .then(response => {
           console.log(response)
           /*this.rawData = response.data.downloads
