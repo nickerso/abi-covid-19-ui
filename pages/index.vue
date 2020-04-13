@@ -4,7 +4,7 @@
       <div class="Simulation__container">
         <input class="p1__input" placeholder="Stimulation mode (0 or 1)" type="number" name="simulation_p1" v-model="p1">
         <input class="p2__input" placeholder="Stimulation level (0.0-1.0)" type="number" name="simulation_p2" v-model="p2">
-        <button class="Simulate__button" @click="runSimulation">Find</button>
+        <button class="Simulate__button" @click="runSimulation">Run Simulation</button>
       </div>
       <div class="error-message" v-if="showError">
         {{ errorMessage }}
@@ -36,41 +36,6 @@
           <line-chart v-if="loaded" :chart-data="membranePotential" :chart-labels="timeValues"></line-chart>
         </div>
       </div>
-
-      <!--
-      <div class="Chart__container" v-if="loaded">
-        <div class="Chart__title">
-          Downloads per Week
-          <span>{{ formattedPeriod }}</span>
-          <hr>
-        </div>
-        <div class="Chart__content">
-          <line-chart v-if="loaded" :chart-data="downloadsWeek" :chart-labels="labelsWeek"></line-chart>
-        </div>
-      </div>
-
-      <div class="Chart__container" v-if="loaded">
-        <div class="Chart__title">
-          Downloads per Month
-          <span>{{ formattedPeriod }}</span>
-          <hr>
-        </div>
-        <div class="Chart__content">
-          <line-chart v-if="loaded" :chart-data="downloadsMonth" :chart-labels="labelsMonth"></line-chart>
-        </div>
-      </div>
-
-      <div class="Chart__container" v-if="loaded">
-        <div class="Chart__title">
-          Downloads per Year
-          <span>{{ formattedPeriod }}</span>
-          <hr>
-        </div>
-        <div class="Chart__content">
-          <line-chart v-if="loaded" :chart-data="downloadsYear" :chart-labels="labelsYear"></line-chart>
-        </div>
-      </div>
-      -->
     </div>
   </div>
 </template>
@@ -80,16 +45,6 @@ import axios from 'axios'
 
 import LineChart from '@/components/LineChart'
 import SimulationInfo from '@/components/SimulationInfo'
-
-import {
-  dateToYear,
-  dateToMonth,
-  dateToWeek,
-  dateToDay,
-  dateBeautify
-} from '../utils/dateFormatter'
-
-import { removeDuplicate, groupData } from '../utils/downloadFormatter.js'
 
 export default {
   components: {
@@ -104,45 +59,21 @@ export default {
       membranePotential: null,
       heartRate: null,
       timeValues: null,
-      package: null,
-      packageName: '',
       loaded: false,
       loading: false,
-      downloads: [],
-      downloadsYear: [],
-      downloadsMonth: [],
-      downloadsWeek: [],
-      labels: [],
-      labelsYear: [],
-      labelsMonth: [],
-      labelsWeek: [],
       showError: false,
-      errorMessage: 'Please enter a package name',
-      periodStart: '',
-      periodEnd: new Date(),
-      rawData: '',
-      totalDownloads: ''
+      errorMessage: 'Please enter simulation parameters'
     }
   },
   mounted () {
+  /*
     if (this.$route.params.package) {
       this.package = this.$route.params.package
       this.requestData()
     }
+  */
   },
   computed: {
-    _endDate () {
-      return dateToDay(this.periodEnd)
-    },
-    _startDate () {
-      return dateToDay(this.periodStart)
-    },
-    period () {
-      return this.periodStart ? `${this._startDate}:${this._endDate}` : 'last-month'
-    },
-    formattedPeriod () {
-      return this.periodStart ? `${dateBeautify(this._startDate)} - ${dateBeautify(this._endDate)}` : 'last-month'
-    }
   },
   methods: {
     resetState () {
@@ -185,60 +116,6 @@ export default {
           this.errorMessage = err.response.data.error
           this.showError = true
         })
-    },
-    requestData () {
-      if (this.package === null || this.package === '' || this.package === 'undefined') {
-        this.showError = true
-        return
-      }
-      this.resetState()
-      this.loading = true
-      axios.get(`https://api.npmjs.org/downloads/range/${this.period}/${this.package}`)
-        .then(response => {
-          console.log(response)
-          this.rawData = response.data.downloads
-          this.downloads = response.data.downloads.map(entry => entry.downloads)
-          this.labels = response.data.downloads.map(entry => entry.day)
-          this.packageName = response.data.package
-          this.totalDownloads = this.downloads.reduce((total, download) => total + download)
-          this.setURL()
-          this.groupDataByDate()
-          this.loaded = true
-          this.loading = false
-        })
-        .catch(err => {
-          this.errorMessage = err.response.data.error
-          this.showError = true
-        })
-    },
-    validateDataRequest () {
-      console.log('ValidateData')
-      if (this.packageName !== '' && this.periodStart !== '') {
-        this.requestData()
-      }
-    },
-    groupDataByDate () {
-      this.formatYear()
-      this.formatMonth()
-      this.formatWeek()
-    },
-    formatYear () {
-      this.labelsYear = this.rawData
-        .map(entry => dateToYear(entry.day))
-        .reduce(removeDuplicate, [])
-      this.downloadsYear = groupData(this.rawData, dateToYear)
-    },
-    formatMonth () {
-      this.labelsMonth = this.rawData
-        .map(entry => dateToMonth(entry.day))
-        .reduce(removeDuplicate, [])
-      this.downloadsMonth = groupData(this.rawData, dateToMonth)
-    },
-    formatWeek () {
-      this.labelsWeek = this.rawData
-        .map(entry => dateToWeek(entry.day))
-        .reduce(removeDuplicate, [])
-      this.downloadsWeek = groupData(this.rawData, dateToWeek)
     },
     setURL () {
       history.pushState({ info: `npm-stats ${this.package}` }, this.package, `/#/${this.package}`)
@@ -289,7 +166,7 @@ hr {
   color: color(robin-egg-blue);
 }
 
-.Search {
+.Simulation {
   @include has(container) {
     max-width: rem(640);
     padding: rem(100) 0 rem(20) 0;
